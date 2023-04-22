@@ -70,4 +70,23 @@ public static class SecureStringVerificationBuilderExtensions
             )
         );
     }
+
+    public static IConditionStage<TRuleBuilder, TTarget> StartWith<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this, string prefix)
+    {
+        return @this.VerifiableBy(new StartSecureStringVerifier(prefix));
+    }
+
+    public static IConditionStage<TRuleBuilder, TTarget> StartWith<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this, Func<TTarget, string> prefixExtractor)
+    {
+        return @this.StartWith(new DelegateValueExtractor<TTarget, string>(prefixExtractor));
+    }
+
+    public static IConditionStage<TRuleBuilder, TTarget> StartWith<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this, IValueExtractor<TTarget, string> prefixExtractor)
+    {
+        return @this.VerifiableBy(
+            new VerifierFactoryToVerifierAdapter<TTarget, SecureString>(
+                target => new StartSecureStringVerifier(prefixExtractor.Extract(target))
+            )
+        );
+    }
 }
