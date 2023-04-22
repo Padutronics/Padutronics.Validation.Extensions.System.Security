@@ -32,4 +32,23 @@ public static class SecureStringVerificationBuilderExtensions
     {
         return @this.VerifiableBy(new EmptySecureStringVerifier());
     }
+
+    public static IConditionStage<TRuleBuilder, TTarget> EndWith<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this, string suffix)
+    {
+        return @this.VerifiableBy(new EndSecureStringVerifier(suffix));
+    }
+
+    public static IConditionStage<TRuleBuilder, TTarget> EndWith<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this, Func<TTarget, string> suffixExtractor)
+    {
+        return @this.EndWith(new DelegateValueExtractor<TTarget, string>(suffixExtractor));
+    }
+
+    public static IConditionStage<TRuleBuilder, TTarget> EndWith<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this, IValueExtractor<TTarget, string> suffixExtractor)
+    {
+        return @this.VerifiableBy(
+            new VerifierFactoryToVerifierAdapter<TTarget, SecureString>(
+                target => new EndSecureStringVerifier(suffixExtractor.Extract(target))
+            )
+        );
+    }
 }
