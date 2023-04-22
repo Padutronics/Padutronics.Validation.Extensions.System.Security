@@ -51,4 +51,23 @@ public static class SecureStringVerificationBuilderExtensions
             )
         );
     }
+
+    public static IConditionStage<TRuleBuilder, TTarget> Match<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this, string pattern)
+    {
+        return @this.VerifiableBy(new RegularExpressionSecureStringVerifier(pattern));
+    }
+
+    public static IConditionStage<TRuleBuilder, TTarget> Match<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this, Func<TTarget, string> patternExtractor)
+    {
+        return @this.Match(new DelegateValueExtractor<TTarget, string>(patternExtractor));
+    }
+
+    public static IConditionStage<TRuleBuilder, TTarget> Match<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this, IValueExtractor<TTarget, string> patternExtractor)
+    {
+        return @this.VerifiableBy(
+            new VerifierFactoryToVerifierAdapter<TTarget, SecureString>(
+                target => new RegularExpressionSecureStringVerifier(patternExtractor.Extract(target))
+            )
+        );
+    }
 }
