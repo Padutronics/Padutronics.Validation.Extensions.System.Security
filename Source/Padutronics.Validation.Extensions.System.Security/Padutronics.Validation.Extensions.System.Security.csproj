@@ -15,4 +15,8 @@
         <RepositoryUrl>https://github.com/Padutronics/Padutronics.Validation.Extensions.System.Security</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Padutronics.Extensions.System.Security" Version="0.1.0" />
+        <PackageReference Include="Padutronics.Validation" Version="0.1.0" />
+    </ItemGroup>
 </Project>
