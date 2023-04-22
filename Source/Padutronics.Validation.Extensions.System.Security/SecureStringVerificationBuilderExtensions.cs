@@ -27,4 +27,9 @@ public static class SecureStringVerificationBuilderExtensions
             )
         );
     }
+
+    public static IConditionStage<TRuleBuilder, TTarget> Empty<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this)
+    {
+        return @this.VerifiableBy(new EmptySecureStringVerifier());
+    }
 }
