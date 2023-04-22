@@ -89,4 +89,9 @@ public static class SecureStringVerificationBuilderExtensions
             )
         );
     }
+
+    public static IConditionStage<TRuleBuilder, TTarget> WhiteSpace<TRuleBuilder, TTarget>(this IVerificationStage<TRuleBuilder, TTarget, SecureString> @this)
+    {
+        return @this.VerifiableBy(new WhiteSpaceSecureStringVerifier());
+    }
 }
